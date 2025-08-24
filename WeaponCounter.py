@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 WeaponLists = glob.glob("WeaponList/*")
 resultlist = np.array([])
 
-img_rgb = cv.imread('source/sample.png',cv.IMREAD_COLOR_BGR)
+img_rgb = cv.imread('source/testimage.png',cv.IMREAD_COLOR_BGR)
 assert img_rgb is not None, "file could not be read, check with os.path.exists()"
 img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
@@ -20,15 +20,34 @@ for weapon_dir in WeaponLists:
     loc = np.where(result >= threshold)
     w, h = template.shape
 
-    # todo : remove covering selection
+    # remove covering selection
+    prev_loc = 0
+    loc_list_x = loc[0]
+    loc_list_y = loc[1]
+
+    if len(loc[0])>1:
+        counter = 0
+        loc_copy = loc_list_x
+        for loc_item in loc_copy:
+            if abs(loc_item-prev_loc) <= 10:
+                # delete selected.
+                loc_list_x = np.delete(loc_list_x, counter)
+                loc_list_y = np.delete(loc_list_y, counter)
+            else:
+                counter+=1
+
+            if prev_loc == 0:
+                prev_loc = loc_item            
 
     # update array for results
     weapon_filename = weapon_dir.replace("WeaponList\\", "")
     weapon_name = weapon_filename.replace(".png", "")
-    print(weapon_name,len(loc[0]))
-    resultlist = np.append(resultlist, [weapon_name, len(loc[0])])
+    #print(weapon_name,len(loc_list_x))
+    resultlist = np.append(resultlist, [weapon_name, len(loc_list_x)])
 
     # make image for test
+    location_list = (weapon_name, loc_list_x, loc_list_y)
+    print(location_list)
     for pt in zip(*loc[::-1]):
         cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 1)
  
