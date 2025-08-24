@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 WeaponLists = glob.glob("WeaponList/*")
 resultlist = np.array([])
 
-img_rgb = cv.imread('source/testimage.png',cv.IMREAD_COLOR_BGR)
+img_rgb = cv.imread('source/sample.png',cv.IMREAD_COLOR_BGR)
 assert img_rgb is not None, "file could not be read, check with os.path.exists()"
 img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
@@ -16,14 +16,23 @@ for weapon_dir in WeaponLists:
 
     result = cv.matchTemplate(img_gray, template, cv.TM_CCORR_NORMED)
     th, tw = template.shape[:2]
-    threshold = 0.95
+    threshold = 0.9
     loc = np.where(result >= threshold)
     w, h = template.shape
 
+    # todo : remove covering selection
+
+    # update array for results
     weapon_filename = weapon_dir.replace("WeaponList\\", "")
     weapon_name = weapon_filename.replace(".png", "")
     print(weapon_name,len(loc[0]))
     resultlist = np.append(resultlist, [weapon_name, len(loc[0])])
+
+    # make image for test
+    for pt in zip(*loc[::-1]):
+        cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 1)
+ 
+cv.imwrite('result/mul_res.png',img_rgb)
 
 resultlist = resultlist.reshape(-1, 2)
 print(resultlist)
