@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 WeaponLists = glob.glob("WeaponList/*")
 resultlist = np.array([])
 
-img_rgb = cv.imread('source/sample2.png',cv.IMREAD_COLOR_BGR)
+img_rgb = cv.imread('source/testimage2.jpg',cv.IMREAD_COLOR_BGR)
 assert img_rgb is not None, "file could not be read, check with os.path.exists()"
 img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
