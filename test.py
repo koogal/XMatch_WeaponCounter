@@ -19,7 +19,7 @@ for source_path in SourceImages:
 
         result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)
         th, tw = template.shape[:2]
-        threshold = 0.99
+        threshold = 0.98
         loc = np.where(result >= threshold)
 
         for pt in zip(*loc[::-1]):
