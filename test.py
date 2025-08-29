@@ -15,6 +15,7 @@ for weapon in WeaponLists:
     th, tw = template.shape[:2]
     threshold = 0.99
     loc = np.where(result >= threshold)
+
     for pt in zip(*loc[::-1]):
         cv2.rectangle(img, pt, (pt[0] + tw, pt[1] + th), (255,0,255), 2)
 
