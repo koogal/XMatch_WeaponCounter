@@ -4,6 +4,8 @@ import numpy as np
 import glob
 from matplotlib import pyplot as plt
 from collections import defaultdict
+import summary
+
 
 WeaponLists = glob.glob("WeaponList/*")
 SourceImages = glob.glob("source/*.png")
@@ -74,20 +76,4 @@ for source_path in SourceImages:
     output_csv = f"{source_name}_result.csv"
     np.savetxt(f"result/{output_csv}", formatted_result, fmt='%s')
 
-# 武器ごとの合計カウント用辞書
-weapon_totals = defaultdict(int)
-
-# resultフォルダ内の *_result.csv をすべて取得
-csv_files = glob.glob("result/*_result.csv")
-
-for csv_path in csv_files:
-    with open(csv_path, "r", encoding="utf-8") as f:
-        for line in f:
-            if ":" in line:
-                name, count = line.strip().split(":")
-                weapon_totals[name] += int(count)
-
-# 集計結果を summary.csv に保存
-with open("result/summary.csv", "w", encoding="utf-8") as f:
-    for name, total in sorted(weapon_totals.items()):
-        f.write(f"{name}:{total}\n")
+summary.generate_summary()
