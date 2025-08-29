@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
  
-img_rgb = cv.imread('testimage.png', cv.IMREAD_ANYDEPTH)
+img_rgb = cv.imread('source/testimage.png', cv.IMREAD_ANYDEPTH)
 assert img_rgb is not None, "file could not be read, check with os.path.exists()"
 template = cv.imread('WeaponList/Inkbrush_Nouveau.png', cv.IMREAD_ANYDEPTH)
 assert template is not None, "file could not be read, check with os.path.exists()"

@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 WeaponLists = glob.glob("WeaponList/*")
 
-img = cv2.imread('testimage.png')
+img = cv2.imread('source/testimage.png')
 for weapon in WeaponLists:    
     template = cv2.imread(weapon) 
     result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)
