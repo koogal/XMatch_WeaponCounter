@@ -14,7 +14,7 @@ def generate_summary():
                     weapon_totals[name] += int(count)
 
     with open("result/summary.csv", "w", encoding="utf-8") as f:
-        for name, total in sorted(weapon_totals.items()):
+        for name, total in sorted(weapon_totals.items(), key=lambda x: x[1], reverse=True):
             f.write(f"{name}:{total}\n")
 
     print("総カウント:", sum(weapon_totals.values()))
