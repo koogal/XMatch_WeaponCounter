@@ -1,23 +1,31 @@
-import matplotlib
-matplotlib.use('TkAgg')
-
+#import matplotlib
+#matplotlib.use('TkAgg')
+import os
 import cv2
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
 
-WeaponLists = glob.glob("WeaponList/*")
+WeaponLists = glob.glob("WeaponList/*")     # 武器テンプレート一覧
 
-img = cv2.imread('source/testimage.png')
-for weapon in WeaponLists:    
-    template = cv2.imread(weapon) 
-    result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)
-    th, tw = template.shape[:2]
-    threshold = 0.99
-    loc = np.where(result >= threshold)
+SourceImages = glob.glob("source/*.png")    # source配下のすべての画像
+for source_path in SourceImages:   
+    img = cv2.imread(source_path)
+    assert img is not None, f"{source_path} が読み込めません"
 
-    for pt in zip(*loc[::-1]):
-        cv2.rectangle(img, pt, (pt[0] + tw, pt[1] + th), (255,0,255), 2)
+    for weapon in WeaponLists:
+        template = cv2.imread(weapon)
+        assert template is not None, f"{weapon} が読み込めません"
 
-img2 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-cv2.imwrite("result/test_py_result.png", img)
+        result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)
+        th, tw = template.shape[:2]
+        threshold = 0.99
+        loc = np.where(result >= threshold)
+
+        for pt in zip(*loc[::-1]):
+            cv2.rectangle(img, pt, (pt[0] + tw, pt[1] + th), (255, 0, 255), 2)
+
+# 結果画像の保存
+    filename = os.path.basename(source_path)
+    output_path = os.path.join("result", f"{filename}_result.png")
+    cv2.imwrite(output_path, img)
