@@ -17,7 +17,7 @@ for weapon_dir in WeaponLists:
     #may need to change
     result = cv.matchTemplate(img_gray, template, cv.TM_CCORR_NORMED)
     th, tw = template.shape[:2]
-    threshold = 0.85
+    threshold = 0.99
     loc = np.where(result >= threshold)
     w, h = template.shape
 
