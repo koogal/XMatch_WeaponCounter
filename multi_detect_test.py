@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
  
 img_rgb = cv.imread('testimage.png', cv.IMREAD_ANYDEPTH)
 assert img_rgb is not None, "file could not be read, check with os.path.exists()"
-template = cv.imread('WeaponList/S-BLAST91.png', cv.IMREAD_ANYDEPTH)
+template = cv.imread('WeaponList/Mint_Decavitator.png', cv.IMREAD_ANYDEPTH)
 assert template is not None, "file could not be read, check with os.path.exists()"
 w, h = template.shape[::-1]
  

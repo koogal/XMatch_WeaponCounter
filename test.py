@@ -20,5 +20,4 @@ for weapon in WeaponLists:
         cv2.rectangle(img, pt, (pt[0] + tw, pt[1] + th), (255,0,255), 2)
 
 img2 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-cv2.imshow("result", img2)
-cv2.waitKey(0)
+cv2.imwrite("result/test_py_result.png", img)
