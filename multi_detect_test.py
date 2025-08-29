@@ -1,17 +1,33 @@
 import cv2 as cv
 import numpy as np
-from matplotlib import pyplot as plt
+import glob
+#from matplotlib import pyplot as plt
+import os
+
  
-img_rgb = cv.imread('source/testimage.png', cv.IMREAD_ANYDEPTH)
-assert img_rgb is not None, "file could not be read, check with os.path.exists()"
-template = cv.imread('WeaponList/Inkbrush_Nouveau.png', cv.IMREAD_ANYDEPTH)
-assert template is not None, "file could not be read, check with os.path.exists()"
+image_paths = glob.glob("source/*.png")
+assert image_paths is not None, "file could not be read, check with os.path.exists()"
+
+template_color = cv.imread('WeaponList/Forge_Splattershot_Pro.png', cv.IMREAD_COLOR)
+assert template_color is not None, "file could not be read, check with os.path.exists()"
+
+template = cv.cvtColor(template_color, cv.COLOR_BGR2GRAY)
 w, h = template.shape[::-1]
- 
-res = cv.matchTemplate(img_rgb,template,cv.TM_CCOEFF_NORMED)
+
 threshold = 0.99
-loc = np.where( res >= threshold)
-for pt in zip(*loc[::-1]):
-    cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 1)
  
-cv.imwrite('result/mul_res.png',img_rgb)
+for img_path in image_paths:
+    img_rgb = cv.imread(img_path, cv.IMREAD_COLOR)
+    assert img_rgb is not None, f"{img_path} が読み込めませんでした"
+    img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
+
+
+    res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
+    loc = np.where(res >= threshold)
+
+    for pt in zip(*loc[::-1]):
+        cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 1)
+ 
+    filename = os.path.basename(img_path)
+    save_path = f"result/result_{filename}"
+    cv.imwrite(save_path, img_rgb)
